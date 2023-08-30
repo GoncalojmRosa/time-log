@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Table,
@@ -8,8 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useLogStore } from "@/store";
 
 export default function Logs() {
+  const logs = useLogStore((state) => state.logs);
   return (
     <Table>
       <TableCaption>List of logs.</TableCaption>
@@ -21,11 +25,17 @@ export default function Logs() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className="font-medium">INV001</TableCell>
-          <TableCell>Paid</TableCell>
-          <TableCell className="text-right">$250.00</TableCell>
-        </TableRow>
+        {Object.keys(logs).map((key) => {
+          const date = logs[key].date as Date;
+
+          return (
+            <TableRow key={key}>
+              <TableCell>{date.toLocaleString()}</TableCell>
+              <TableCell>{logs[key].hour}</TableCell>
+              <TableCell>{logs[key].note}</TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );
